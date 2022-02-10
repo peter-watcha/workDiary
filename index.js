@@ -342,6 +342,12 @@ function parseArgv() {
       description: 'custom template option to adjust cordinate',
       default: 0
     })
+    .option('reuse-sign', {
+      alias: 'r',
+      type: 'boolean',
+      description: 'reuse sign',
+      default: true
+    })
 
   return argv;
 }
@@ -380,9 +386,7 @@ async function main(){
     process.exit(1)
   }
 
-  const reuseSign = myArgs.filter((arg) => arg === "--reuse-sign");
-  const isReuseSign = reuseSign.length > 0;
-  const signature = await getSignature(isReuseSign);
+  const signature = await getSignature(myArgs.argv['reuse-sign']);
   const csvFileName = myArgs.argv.csv
   var year = myArgs.argv.year
   const [userInfo, workInfos] = await parseCSV(csvFileName);
