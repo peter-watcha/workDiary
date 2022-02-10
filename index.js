@@ -375,7 +375,7 @@ function fillParagraph(text, font, fontSize, maxWidth) {
           paragraphs[index] = newParagraph.map(p => p.join(' ')).join('\n');
       }
   }
-  return paragraphs;
+  return paragraphs.join('\n');
 }
 
 async function main(){
