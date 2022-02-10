@@ -188,11 +188,11 @@ async function createSheet(pdfTemplatePath, fileName, userInfo, workInfos, year,
       y: workStartDatePoint.y - fontSize - height*i + adjustY,
       size: fontSize,
     })
-    page.drawText(fillParagraph(
+    page.drawLinesOfText(fillParagraph(
       workInfo.workMemo,
       font,
       fontSize,
-      200
+      250
     ), {
       x: workMemoPoint.x + adjustX,
       y: workMemoPoint.y - fontSize - height*i + adjustY,
@@ -374,7 +374,7 @@ function fillParagraph(text, font, fontSize, maxWidth) {
           paragraphs[index] = newParagraph.map(p => p.join(' ')).join('\n');
       }
   }
-  return paragraphs.join('\n');
+  return paragraphs;
 }
 
 async function main(){
