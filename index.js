@@ -4,6 +4,7 @@ const fontkit = require('@pdf-lib/fontkit');
 const fs = require('fs');
 const parse = require('csv-parse/lib/sync');
 const open = require('open');
+const os = require('os');
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
 var bodyParser = require('body-parser');
@@ -246,14 +247,41 @@ const sleep = (ms) => {
    })
 }
 
+function getSignatureFilePath() {
+  const tmpDir = os.tmpdir();
+  filePath = path.join(tmpDir, "workDiary-signature.png");
+  return filePath;
+}
+
+function getSignatureFromFile() {
+  const filePath = getSignatureFilePath();
+  if(fs.existsSync(filePath)) {
+    return fs.readFileSync(filePath, { encoding: "utf-8" })
+  }
+  return "";
+}
+
+function writeSignatureFile(data) {
+  const filePath = getSignatureFilePath();
+  fs.writeFileSync(filePath, data);
+}
+
+
 async function getSignature() {
+  var data = ""
+
+  if (isReuseSign === true) {
+    data = getSignatureFromFile();
+    if (data !== "") {
+      return data;
+    }  
+  }
+
   const app = express()
   app.use(bodyParser.json()); // for parsing application/json
   app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
   app.use(upload.array()); // for parsing multipart/form-data
   app.use(express.static(appDir+'/public'))
-
-  var data = ""
 
   app.post('/', (req, res) =>{
     res.send("Hello")
@@ -273,6 +301,7 @@ async function getSignature() {
   }
 
   server.close()
+  writeSignatureFile(data);
   return data
 }
 
@@ -313,7 +342,6 @@ function parseArgv() {
 }
 
 async function main(){
-  const signature = await getSignature()
   const myArgs = parseArgv()
 
   if (myArgs.argv.csv === undefined) {
@@ -322,6 +350,9 @@ async function main(){
     process.exit(1)
   }
 
+  const reuseSign = myArgs.filter((arg) => arg === "--reuse-sign");
+  const isReuseSign = reuseSign.length > 0;
+  const signature = await getSignature(isReuseSign);
   const csvFileName = myArgs.argv.csv
   var year = myArgs.argv.year
   const [userInfo, workInfos] = await parseCSV(csvFileName);
