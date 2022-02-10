@@ -178,7 +178,7 @@ async function createSheet(pdfTemplatePath, fileName, userInfo, workInfos, year,
     y: signDatePoint.y - fontSize + adjustY,
     size: fontSize,
   })
-
+ 
   for (var i = 0; i < workInfos.workInfoList.length; i++) {
     fontSize = 8
     const height = 63
@@ -196,6 +196,7 @@ async function createSheet(pdfTemplatePath, fileName, userInfo, workInfos, year,
     ), {
       x: workMemoPoint.x + adjustX,
       y: workMemoPoint.y - fontSize - height*i + adjustY,
+      lineHeight: fontSize * 1.5,
       size: fontSize,
     })
 
