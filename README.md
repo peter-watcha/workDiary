@@ -1,10 +1,11 @@
 # workDiary
+## 원본 : https://github.com/jen6/workDiary
 
 재택근무 pdf form을 채워줍니다
 
 ## Install
 ```
-npm install -g https://github.com/jen6/workDiary
+npm install -g https://github.com/peter-watcha/workDiary
 ```
 
 ## Usage
@@ -17,6 +18,9 @@ npm install -g https://github.com/jen6/workDiary
 ```
 $ workDiary --csv csv.csv
 ```
+
+## reuse-sign
+기본으로 싸인을 재사용합니다. 싸인 수정할 일이 있으면 -r=false 를 추가해주세요
 
 ### custom template option
 회사 내에서 써야하는 pdf template이 바뀌었는데 전체적으로 위치가 밀린경우 custom template기능을 사용하면 됩니다.
