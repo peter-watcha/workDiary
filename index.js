@@ -188,7 +188,12 @@ async function createSheet(pdfTemplatePath, fileName, userInfo, workInfos, year,
       y: workStartDatePoint.y - fontSize - height*i + adjustY,
       size: fontSize,
     })
-    page.drawText(workInfo.workMemo, {
+    page.drawText(fillParagraph(
+      workInfo.workMemo,
+      font,
+      fontSize,
+      200
+    ), {
       x: workMemoPoint.x + adjustX,
       y: workMemoPoint.y - fontSize - height*i + adjustY,
       size: fontSize,
@@ -339,6 +344,31 @@ function parseArgv() {
     })
 
   return argv;
+}
+
+function fillParagraph(text, font, fontSize, maxWidth) {
+  var paragraphs = text.split('\n');
+  for (let index = 0; index < paragraphs.length; index++) {
+      var paragraph = paragraphs[index];
+      if (font.widthOfTextAtSize(paragraph, fontSize) > maxWidth) {
+          var words = paragraph.split(' ');
+          var newParagraph = [];
+          var i = 0;
+          newParagraph[i] = [];
+          for (let k = 0; k < words.length; k++) {
+              var word = words[k];
+              newParagraph[i].push(word);
+              if (font.widthOfTextAtSize(newParagraph[i].join(' '), fontSize) > maxWidth) {
+                  newParagraph[i].splice(-1); // retira a ultima palavra
+                  i = i + 1;
+                  newParagraph[i] = [];
+                  newParagraph[i].push(word);
+              }
+          }
+          paragraphs[index] = newParagraph.map(p => p.join(' ')).join('\n');
+      }
+  }
+  return paragraphs.join('\n');
 }
 
 async function main(){
