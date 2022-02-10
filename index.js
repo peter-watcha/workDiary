@@ -188,7 +188,7 @@ async function createSheet(pdfTemplatePath, fileName, userInfo, workInfos, year,
       y: workStartDatePoint.y - fontSize - height*i + adjustY,
       size: fontSize,
     })
-    page.drawLinesOfText(fillParagraph(
+    page.drawText(fillParagraph(
       workInfo.workMemo,
       font,
       fontSize,
