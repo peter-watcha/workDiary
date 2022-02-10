@@ -272,7 +272,7 @@ function writeSignatureFile(data) {
 }
 
 
-async function getSignature() {
+async function getSignature(isReuseSign) {
   var data = ""
 
   if (isReuseSign === true) {
